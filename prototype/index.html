@@ -48,7 +48,7 @@ table{border-collapse:collapse;width:100%;font-size:13px}td,th{border-bottom:1px
 <header>
 <h1>Prototype T3 · Trợ lý Đặt chỗ — ca "ok đổi đi" (xác nhận mơ hồ) → "mình đổi nhầm"</h1>
 <div class="sub">Dữ liệu dựng (TRV-7Q2K, hãng Bay Mẫu). Một file HTML, không gọi AI thật. Bấm theo thứ tự: Màn 1 → Màn 2. Có thể thử nhánh "Thôi, hoàn vé" và ô "Ca lạ".</div>
-<div class="tabs"><button id="t1" class="on">Màn 1 · Ca khó: "ok đổi đi"</button><button id="t2">Màn 2 · Đổi nhầm → sửa</button>
+<div class="tabs"><button id="t1" class="on">Màn 1 · Ca khó: "ok đổi đi"</button><button id="t2">Màn 2 · Khách bấm nhầm → sửa</button><button id="t3">Màn 3 · AI tự đổi sai → xử lý</button>
 <label style="margin-left:10px;font-size:13px"><input type="checkbox" id="ann" checked> Hiện số chú thích HAX/PAIR</label></div>
 </header>
 <main>
@@ -75,7 +75,16 @@ const ev=(x)=>`<div class="ev"><span class="n">2</span>Dựa vào: đặt chỗ 
 const staffBtn=`<button class="btn out" onclick="go('staff')"><span class="n">7</span>Gặp nhân viên</button>`;
 const opts=sel=>O.map(o=>`<div class="opt ${!o[3]?'dis':''} ${o[0]==sel?'sel':''}"><div><b>${o[0]}</b> · ${o[1]}<br><small>${o[2]}</small></div>${o[3]&&S!='confirm'&&S!='done'?`<button class="btn" onclick="pick('${o[0]}')">Chọn</button>`:''}</div>`).join('');
 function timerBox(){return `<div class="box hold"><span class="n">4</span>Mình đã <b>giữ chỗ ${chosen||'BM 201'}</b> cho cả 2 người trong <span class="timer" id="tm">20:00</span>. Chưa đổi vé nên chưa mất lần đổi miễn phí. Hết giờ tự nhả.</div>`}
+function aiErrorDemo(){
+ let h=ai('<b>Mô phỏng sự cố hệ thống</b>: AI đã bỏ qua bước xác nhận. Đây là hành vi sai, không phải quyền tự chủ được phép.');
+ h+=me('Tìm chuyến khác cho hai mẹ con nhé, mình chưa quyết giờ.');
+ h+=ai('<div class="box red"><b>AI đã làm sai:</b> Đã đổi cả hai hành khách sang BM 201 · 13/11 07:00 dù khách chưa chọn chuyến và chưa xác nhận.</div>');
+ h+=me('Tôi chưa đồng ý đổi mà? Tôi cần chuyến 09:30!');
+ h+=ai(`<span class="conf"><span class="n">1</span>Lỗi hệ thống · đổi vé khi chưa được xác nhận</span><p>Xin lỗi bạn. Mình đã tự đổi sang chuyến 07:00 khi bạn chưa xác nhận. Đây là lỗi của hệ thống, không phải của bạn.</p><div class="box warn"><b>Trạng thái hiện tại:</b> vé của Nguyễn Minh An và Nguyễn Gia Bình đã sang BM 201 · 13/11 07:00; lần đổi miễn phí đã dùng. Mình không có công cụ tự hoàn tác. Mình sẽ không tự đổi thêm hoặc gửi hoàn vé.</div><div class="ev"><span class="n">2</span>Nhật ký mô phỏng: 15:04 gọi doi_chuyen_bay → thành công; không có sự kiện khách bấm xác nhận. Mã sự cố SC-1504.</div>${S=='aierror'?'<div class="btns"><button class="btn pri" onclick="go(\'airecovery\')">Giữ chuyến 09:30 và nhờ nhân viên xử lý</button></div><p>Chưa đổi lại vé. Chọn nút trên để giữ 2 chỗ và gửi yêu cầu hỗ trợ kèm nhật ký.</p>':`<div class="box hold"><span class="n">4</span>Đã giữ 2 chỗ BM 205 · 13/11 09:30 trong <span class="timer" id="tm">20:00</span>. Đây chưa phải vé mới.</div><div class="box done"><span class="n">7</span>Đã chuyển ca ưu tiên SC-1504 cho nhân viên ngay sau yêu cầu của bạn. Dự kiến phản hồi trong 5 phút (giả lập). Nhân viên nhận: hai hành khách, vé hiện tại 07:00, mong muốn 09:30, chỗ đang giữ và nhật ký thiếu xác nhận.</div>${S=='airecovery'?'<div class="btns"><button class="btn out" onclick="go(\'aiaccepted\')">Xem tiến độ hỗ trợ</button></div>':'<div class="box done">Nhân viên Lan đã nhận ca, đang kiểm tra khả năng khôi phục quyền đổi và chi phí với hãng. Chưa có kết quả đổi lại.</div>'}<div class="box red">Không hứa đã hoàn tác, miễn phí hoặc bồi thường. Nếu chỗ giữ hết hạn trước khi xử lý xong, nhân viên cần kiểm tra lại chỗ; vé hiện tại vẫn là BM 201.</div>`}`);
+ return h;
+}
 function render(){let h='';
+ if(screen==3){h=aiErrorDemo()}else{
  h+=ai(`Chuyến BM 213 bị huỷ do thời tiết. Bạn được đổi miễn phí một lần. Còn chỗ:${opts('')}${ev('')}`);
  h+=me('ok đổi đi');
  if(screen==1){
@@ -89,6 +98,7 @@ function render(){let h='';
   if(S=='wrong'){h+=ai(`<span class="conf"><span class="n">1</span>Mình không tự sửa được ở bước này</span><div style="margin-top:6px">Lần đổi miễn phí đã dùng, nên <b>mình không hoàn tác hay đổi lại được</b>. Mình vừa làm 2 việc cho bạn:</div><div class="box hold"><span class="n">4</span>1) Giữ chỗ <b>BM 205 · 09:30</b> cho 2 người trong <span class="timer" id="tm">20:00</span> để chỗ không bị mất.</div><div class="box done"><span class="n">7</span>2) Chuyển <b>nhân viên</b> (ca ưu tiên, chờ khoảng 5 phút). Họ thấy sẵn: đổi 201 → muốn 205, 2 hành khách, chỗ đang giữ. Bạn không phải kể lại.</div>${ev(' · lịch sử thao tác: bạn bấm "Xác nhận đổi" lúc 15:04')}<div class="btns"><button class="btn out" onclick="go('staffbusy')">Xem nhân viên đang xử lý</button><button class="btn ghost"><span class="n">9</span>Báo: AI sai chỗ nào?</button></div><div class="box red" style="font-size:12.5px">Mình <b>chưa</b> nói "đã đổi lại" vì việc đó chỉ nhân viên làm được và có thể không còn miễn phí.</div>`)}
   else{h+=ai(`Nhân viên Lan đã nhận ca. Bước tiếp theo do nhân viên quyết (có thể tính phí đổi). Chỗ BM 205 vẫn được giữ tới hết đồng hồ.`)}
  }
+ }
  $('#chat').innerHTML=h;
  const isHold=(screen==2)||(S=='ask'||S=='confirm');clearInterval(t);const tm=$('#tm');if(tm){sec=1200;t=setInterval(()=>{sec--;tm.textContent=String(Math.floor(sec/60)).padStart(2,'0')+':'+String(sec%60).padStart(2,'0');if(sec<=0)clearInterval(t)},1000)}
  tools();ann();}
@@ -101,12 +111,13 @@ const T=[['tra_cuu_dat_cho','Tự làm','p-auto','Chỉ đọc. Sai/chậm chỉ
 ['gui_yeu_cau_hoan_ve','Cần khách duyệt + tích hiểu','p-ask','Gửi rồi không huỷ, mất chỗ + tới 90 ngày. Có thêm bước tích ô.',0],
 ['chuyen_nhan_vien','Tự làm','p-hum','Chuyển thừa chỉ tốn công nhân viên. Trẻ bay một mình, đổi tên: luôn chuyển.',1],
 ['Hứa bồi thường tiền mặt','Cấm','p-no','Huỷ do thời tiết: hãng không bồi thường. Không có tool, không có nút.',0]];
-function tools(){const act=screen==2?[1,2,5]:(S=='confirm'?[2,3]:(S=='done'?[3]:(S=='ask'?[1]:[]))); $('#tools').innerHTML=T.map((r,i)=>`<tr style="${act.includes(i)?'background:#fffaf0':''}"><td><code>${r[0]}</code></td><td><span class="pill ${r[2]}">${r[1]}</span></td><td>${r[3]}</td></tr>`).join('')}
+function tools(){const act=screen==3?(S=='aierror'?[3]:[1,5]):screen==2?[1,2,5]:(S=='confirm'?[2,3]:(S=='done'?[3]:(S=='ask'?[1]:[]))); $('#tools').innerHTML=T.map((r,i)=>`<tr style="${act.includes(i)?'background:#fffaf0':''}"><td><code>${r[0]}</code></td><td><span class="pill ${r[2]}">${r[1]}</span>${screen==3&&i==3?'<br><small style="color:var(--r)">Sự cố: đã vi phạm mức cần duyệt. Phải kiểm tra xác nhận hợp lệ trước khi gọi tool.</small>':''}</td><td>${r[3]}</td></tr>`).join('')}
 const A=[['1','HAX G2 · làm rõ AI làm tốt tới đâu','Nhãn "Mình chưa chắc" nói rõ chỗ mơ hồ, thay cho con số %.'],['2','HAX G11 + PAIR Explainability','Dòng "Dựa vào": đặt chỗ, tin báo, chính sách; khách tự kiểm.'],['3','HAX G10 · thu hẹp khi nghi ngờ','Hỏi lại một câu (chuyến nào, cho ai) thay vì đoán "ok đổi đi".'],['4','HAX G8/G9 + PAIR Feedback & Control','Giữ chỗ có đếm ngược; hết giờ tự nhả.'],['5','Mức "cần duyệt"','Thẻ xác nhận nói rõ chuyến, người, phí, dùng lần đổi duy nhất, không tự hoàn tác.'],['6','HAX G9 · sửa dễ','Sửa ngay trên thẻ: chọn chuyến khác, không bắt đầu lại.'],['7','PAIR Errors + Graceful Failure','Đường sang người thật kèm tóm tắt; khi không tự sửa được thì chuyển ngay.'],['8','Mức "cấm" + HAX G1','Không có nút bồi thường; hoàn vé nói trước không rút lại được.'],['9','HAX G15 · mời feedback','Nút "AI hiểu sai chỗ nào?" ghi lại để nhóm sửa.']];
 function ann(){$('#annl').innerHTML=A.map(a=>`<li><span class="n" style="display:inline-flex">${a[0]}</span><b>${a[1]}</b> — ${a[2]}</li>`).join('')}
 function pick(f){chosen=f;S='confirm';render()}function go(s){S=s;if(s=='staff'&&screen==2)S='staffbusy';render()}
-function sync(){$('#t1').classList.toggle('on',screen==1);$('#t2').classList.toggle('on',screen==2);render()}
+function sync(){$('#t1').classList.toggle('on',screen==1);$('#t2').classList.toggle('on',screen==2);$('#t3').classList.toggle('on',screen==3);render()}
 $('#t1').onclick=()=>{screen=1;S='ask';chosen=null;sync()};$('#t2').onclick=()=>{screen=2;S='wrong';sync()};
+$('#t3').onclick=()=>{screen=3;S='aierror';chosen=null;sync()};
 $('#ann').onchange=e=>document.body.classList.toggle('hide-n',!e.target.checked);
 $('#ok').onchange=e=>$('#send').disabled=!e.target.checked;
 $('#cancel').onclick=()=>$('#m').classList.remove('show');$('#mh').onclick=()=>{$('#m').classList.remove('show');go('staff')};
