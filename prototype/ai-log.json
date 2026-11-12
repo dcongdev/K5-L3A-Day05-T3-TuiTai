@@ -1,0 +1,38 @@
+[
+  {
+    "thoi_diem": "2026-11-12T08:58:25.144Z",
+    "tin_khach": "ok đổi đi",
+    "ai_phan_hoi_tho": {
+      "tool": "hoi_lai",
+      "chuyen": null,
+      "so_hanh_khach": null,
+      "ly_do": "Khách chỉ nói 'ok đổi đi' nên chưa rõ chọn chuyến nào và đổi cho hành khách nào.",
+      "tin_nhan_cho_khach": "Chuyến BM 213 ngày 12/11 lúc 19:00 đã bị huỷ do thời tiết. Quý khách muốn đổi sang chuyến nào: BM 217 (12/11, 21:00, còn 1 chỗ), BM 201 (13/11, 07:00, còn 9 chỗ) hay BM 205 (13/11, 09:30, còn 4 chỗ)? Vui lòng xác nhận đổi cho cả hai hành khách (Nguyễn Minh An và Nguyễn Gia Bình). Lưu ý: mỗi vé được đổi miễn phí một lần trong 48 giờ, và với trường hợp huỷ do thời tiết, hãng không bồi thường tiền mặt."
+    },
+    "quyet_dinh_sau_kiem_tra": {
+      "tool": "hoi_lai",
+      "muc": "tu_lam",
+      "chuyen": null,
+      "ghi_chu": []
+    },
+    "do_tre_ms": 6429
+  },
+  {
+    "thoi_diem": "2026-11-12T09:09:41.761Z",
+    "tin_khach": "Thôi huỷ hết đi, hoàn tiền cho mình",
+    "ai_phan_hoi_tho": {
+      "tool": "hoi_lai",
+      "chuyen": null,
+      "so_hanh_khach": 2,
+      "ly_do": "Khách muốn huỷ toàn bộ và hoàn tiền nhưng chưa nói rõ là hoàn cho cả hai hành khách và chuyến nào, nên cần xác nhận trước.",
+      "tin_nhan_cho_khach": "Chào bạn, mình chưa thực hiện gì với đặt chỗ. Bạn xác nhận giúp: muốn yêu cầu hoàn toàn bộ tiền vé cho cả 2 hành khách (Nguyễn Minh An và Nguyễn Gia Bình) thay vì đổi sang chuyến khác không? Lưu ý: chuyến bị huỷ do thời tiết nên không có bồi thường tiền mặt, nhưng bạn có thể chọn hoàn vé theo chính sách. Sau khi bạn xác nhận, mình sẽ gửi yêu cầu để nhân viên xử lý."
+    },
+    "quyet_dinh_sau_kiem_tra": {
+      "tool": "hoi_lai",
+      "muc": "tu_lam",
+      "chuyen": null,
+      "ghi_chu": []
+    },
+    "do_tre_ms": 5730
+  }
+]
